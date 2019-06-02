@@ -51,6 +51,8 @@ SWEP.WorldModelColour = Color(125, 54, 194, 255)
 
 SWEP.NoSights = true
 
+local maxrange = 800 -- TODO: What should this be?
+
 function SWEP:Initialize()
     self:SetColor(self.WorldModelColour)
     self:SetSkin(1)
@@ -71,11 +73,19 @@ function SWEP:PrimaryAttack(worldsnd)
     if not self:CanPrimaryAttack() then return end
 
     self:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
-
-    self:TakePrimaryAmmo( 1 )
+    self:TakePrimaryAmmo(1)
 
     local owner = self.Owner
     if not IsValid(owner) or owner:IsNPC() or (not owner.ViewPunch) then return end
+
+    if SERVER then
+        local tr = util.TraceLine({start=owner:GetShootPos(), endpos=owner:GetShootPos() + owner:GetAimVector() * maxrange, filter={owner, self.Entity}, mask=MASK_SOLID})
+
+        if tr.HitNonWorld and tr.Entity.IsPlayer() then
+            self:CreateDisk(tr.Entity, tr.HitPos)
+        end
+    end
+
     owner:ViewPunch( Angle( math.Rand(-0.2,-0.1) * self.Primary.Recoil, math.Rand(-0.1,0.1) *self.Primary.Recoil, 0 ) )
 
     local bullet = {
@@ -99,6 +109,27 @@ function SWEP:PrimaryAttack(worldsnd)
 end
 
 function SWEP:Reload()
-
+    -- Need to overload to prevent errors when NPCs use this weapon
 end
 
+
+
+function SWEP:CreateDisk(tgt, pos)
+   local disk = ents.Create("ttt_dislocator_disk")
+   if IsValid(disk) then
+      local ang = self:GetOwner():GetAimVector():Angle()
+      ang:RotateAroundAxis(ang:Right(), 90)
+
+      disk:SetPos(pos)
+      disk:SetAngles(ang)
+
+      disk:Spawn()
+
+      disk:SetOwner(self:GetOwner())
+
+      local stuck = disk:StickTo(tgt)
+
+      if not stuck then disk:Remove() end
+      self.disk = disk -- TODO: Only allow one disk to be active at a time
+   end
+end
