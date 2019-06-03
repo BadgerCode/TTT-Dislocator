@@ -9,7 +9,7 @@ if CLIENT then
     SWEP.PrintName = "Dislocator"
     SWEP.Slot      = 7
 
-    SWEP.Icon = "vgui/ttt/icon_launch" -- TODO: Proper icon
+    SWEP.Icon = "vgui/ttt/icon_badger_dislocator"
 
     SWEP.ViewModelFOV = 72
 

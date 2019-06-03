@@ -17,15 +17,12 @@ TODO
     * ✅ Wait delay
     * ✅ If launches remaining is 0, launch player upwards and destroy self
 * ✅ Prevent targetting a player with one already on
-* Prevent targetting traitors?
-    * Might make it easy to spot traitors
 * Icon
 * Disk on view model
 * Projectile
     * Disk model
     * Moves through air (not instant)
     * Check collisions to decide which player to attach to
-    * Prevent targetting traitors
 * Change launch behaviour
     * Keep moving the player until time is up (10 seconds?)
     * If player hits a wall, move a different direction

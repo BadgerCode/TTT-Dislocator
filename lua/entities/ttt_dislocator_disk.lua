@@ -2,7 +2,7 @@
 AddCSLuaFile()
 
 ENT.Type = "anim"
-ENT.Model = Model("models/Items/combine_rifle_ammo01.mdl") -- TODO: Disk
+ENT.Model = Model("models/props_junk/sawblade001a.mdl") -- TODO: Disk
 ENT.TrailColour = Color(125, 54, 194)
 
 ENT.Stuck = false
@@ -99,7 +99,7 @@ if SERVER then
    local diesound = Sound("weapons/physcannon/energy_disintegrate4.wav")
    local punchsound = Sound("weapons/ar2/ar2_altfire.wav")
 
-   function ENT:RandomVelocity()
+   function ENT:GenerateRandomVelocity()
       local distance = self.PunchSpeed
 
       local u = math.random()
@@ -142,7 +142,7 @@ if SERVER then
             local ply = self.PunchEntity
             local norm = Vector(0.5, 0.5, 1)
 
-            self.PunchCurrentVelocity = self:RandomVelocity()
+            self.PunchCurrentVelocity = self:GenerateRandomVelocity()
 
             ply:SetGroundEntity(NULL)
             ply:SetVelocity(self.PunchCurrentVelocity)
