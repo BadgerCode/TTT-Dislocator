@@ -22,7 +22,7 @@ end
 
 SWEP.Base = "weapon_tttbase"
 
-SWEP.Kind = WEAPON_EQUIP
+SWEP.Kind = WEAPON_EQUIP1
 SWEP.CanBuy = {ROLE_TRAITOR}
 SWEP.LimitedStock = true
 
@@ -41,11 +41,15 @@ SWEP.Primary.Ammo           = nil
 
 SWEP.AutoSpawnable      = false
 SWEP.UseHands           = true
+
 SWEP.ViewModelFlip      = false
 SWEP.ViewModelFOV       = 54
 SWEP.ViewModel  = "models/weapons/c_superphyscannon.mdl"
 SWEP.ViewModelMaterial = "models/weapons/v_physcannon/v_superphyscannon_sheet"
 SWEP.ViewModelColour = Vector(0.49, 0.212, 0.761)
+SWEP.ViewModelDiskModel = "models/props_junk/sawblade001a.mdl"
+SWEP.ViewModelDiskModelMaterial = "models/props_junk/phys_objects01a"
+
 SWEP.WorldModel = "models/weapons/w_physics.mdl"
 SWEP.WorldModelColour = Color(125, 54, 194, 255)
 
@@ -60,11 +64,37 @@ end
 
 function SWEP:PreDrawViewModel(viewModel)
     Material(self.ViewModelMaterial):SetVector("$color2", self.ViewModelColour )
-    --viewModel:SetPoseParameter("active", 1) -- TODO: Remove/fix. Sets the claws to open but they jitter
+    Material(self.ViewModelDiskModelMaterial):SetVector("$color2", self.ViewModelColour )
 end
 
 function SWEP:PostDrawViewModel(viewModel)
     Material(self.ViewModelMaterial):SetVector("$color2", Vector(1, 1, 1) )
+
+    local timeUntilShowModel = math.max(self:GetNextPrimaryFire() - CurTime(), 0)
+
+    if self:Clip1() < 1 or timeUntilShowModel - 1 > 0 then return end
+
+    if not IsValid(self.DiskViewModel) then
+        self.DiskViewModel = ClientsideModel(self.ViewModelDiskModel, RENDERGROUP_VIEWMODEL)
+        self.DiskViewModel:SetModelScale(0.5)
+    end
+
+    self.DiskViewModel:SetModelScale(0.5 * (1 - timeUntilShowModel))
+
+    local rightHandPos, rightHandAngle = viewModel:GetBonePosition(viewModel:LookupBone("ValveBiped.Bip01_L_Hand"))
+    rightHandPos = rightHandPos
+                    + rightHandAngle:Forward() * 70
+                    + rightHandAngle:Up() * -12
+                    + rightHandAngle:Right() * 12
+
+    local modelSettings = {
+        model = self.ViewModelDiskModel,
+        pos = rightHandPos,
+        angle = rightHandAngle
+    }
+    render.Model(modelSettings, self.DiskViewModel)
+    -- Make sure to reset the material AFTER rendering the clientside prop
+    Material(self.ViewModelDiskModelMaterial):SetVector("$color", Vector(1, 1, 1) )
 end
 
 
