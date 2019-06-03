@@ -35,7 +35,7 @@ function ENT:Initialize()
 end
 
 function ENT:StickTo(ent)
-   if (not ent:IsPlayer()) then return false end
+   if (not ent:IsPlayer() or ent.HasDislocator) then return false end
 
    self:SetParent(ent)
 
@@ -44,6 +44,7 @@ function ENT:StickTo(ent)
    self:StartEffects()
 
    self.Stuck = true
+   ent.HasDislocator = true
 
    return true
 end
@@ -51,6 +52,7 @@ end
 function ENT:OnRemove()
    if IsValid(self.BallSprite) then
       self.BallSprite:Remove()
+      self:GetParent().HasDislocator = false
    end
 end
 
