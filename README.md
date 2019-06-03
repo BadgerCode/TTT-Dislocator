@@ -26,6 +26,10 @@ TODO
 * ✅ Explode projectile if no target found within period of time
 * ✅ Prevent sticking to person who fired it?
 * ✅ Ensure traitor gets credit for fall damage
+* Change sound effects
+    * Laser sound when shot
+    * Laser sound when flying (with or without player)
+    * Ambient hum when ready?
 * Change launch behaviour
     * Keep moving the player until time is up (10 seconds?)
     * If player hits a wall, move a different direction
