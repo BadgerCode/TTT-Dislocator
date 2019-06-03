@@ -145,7 +145,6 @@ if SERVER then
                 phys:SetVelocity(Vector(0, 0, 0))
             end
 
-            self:SetMoveType(MOVETYPE_VPHYSICS)
             self:SetSolid(SOLID_NONE)
 
             self:SetPos(Vector(self.PunchEntity:GetPos().x, self.PunchEntity:GetPos().y, self:GetPos().z))

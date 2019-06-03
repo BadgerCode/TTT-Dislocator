@@ -18,19 +18,19 @@ TODO
     * ✅ If launches remaining is 0, launch player upwards and destroy self
 * ✅ Prevent targetting a player with one already on
 * ✅ Icon
-* Projectile
+* ✅ Projectile
     * ✅ Disk model
     * ✅ Moves through air (not instant)
     * ✅ Check collisions to decide which player to attach to
 * ✅ Disk on view model
 * ✅ Explode projectile if no target found within period of time
-* Stop the wobble of the projectile?
-* Only allow one disk per gun at a time?
+* ✅ Prevent sticking to person who fired it?
+* ✅ Ensure traitor gets credit for fall damage
 * Change launch behaviour
     * Keep moving the player until time is up (10 seconds?)
     * If player hits a wall, move a different direction
-* ✅ Prevent sticking to person who fired it?
-* ✅ Ensure traitor gets credit for fall damage
+* Stop the wobble of the projectile?
+* Only allow one disk per gun at a time?
 * Support other entities?
     * NPCS? Props?
 * Put into gamemodes/terrortown/entities/weapons?
