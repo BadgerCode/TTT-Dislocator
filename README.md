@@ -17,12 +17,13 @@ TODO
     * ✅ Wait delay
     * ✅ If launches remaining is 0, launch player upwards and destroy self
 * ✅ Prevent targetting a player with one already on
-* Icon
-* Disk on view model
+* ✅ Icon
 * Projectile
-    * Disk model
-    * Moves through air (not instant)
-    * Check collisions to decide which player to attach to
+    * ✅ Disk model
+    * ✅ Moves through air (not instant)
+    * ✅ Check collisions to decide which player to attach to
+* Disk on view model
+* Only allow one disk per gun at a time?
 * Change launch behaviour
     * Keep moving the player until time is up (10 seconds?)
     * If player hits a wall, move a different direction

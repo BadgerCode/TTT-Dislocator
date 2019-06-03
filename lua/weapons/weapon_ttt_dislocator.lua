@@ -51,7 +51,7 @@ SWEP.WorldModelColour = Color(125, 54, 194, 255)
 
 SWEP.NoSights = true
 
-local maxrange = 800 -- TODO: What should this be?
+
 
 function SWEP:Initialize()
     self:SetColor(self.WorldModelColour)
@@ -79,32 +79,17 @@ function SWEP:PrimaryAttack(worldsnd)
     if not IsValid(owner) or owner:IsNPC() or (not owner.ViewPunch) then return end
 
     if SERVER then
-        local tr = util.TraceLine({start=owner:GetShootPos(), endpos=owner:GetShootPos() + owner:GetAimVector() * maxrange, filter={owner, self.Entity}, mask=MASK_SOLID})
+        local vsrc = owner:GetShootPos()
+        local vang = owner:GetAimVector()
 
-        if tr.HitNonWorld and tr.Entity.IsPlayer() then
-            self:CreateDisk(tr.Entity, tr.HitPos)
-        end
+        local diskAngles = owner:EyeAngles()
+        local diskPos = vsrc + vang * 50 + diskAngles:Right() * 20 - diskAngles:Up() * 20
+
+        self:CreateDisk(diskPos, diskAngles)
     end
 
-    owner:ViewPunch( Angle( math.Rand(-0.2,-0.1) * self.Primary.Recoil, math.Rand(-0.1,0.1) *self.Primary.Recoil, 0 ) )
+    owner:ViewPunch( Angle( math.Rand(-0.2,-0.1) * self.Primary.Recoil, math.Rand(-0.1,0.1) * self.Primary.Recoil, 0 ) )
 
-    local bullet = {
-        Attacker        = self.Owner,
-        Num             = 1,
-        Src             = self.Owner:GetShootPos(),
-        Dir             = self.Owner:GetAimVector(),
-        Spread          = 0.1 * 0.1 , 0.1 * 0.1, 0,
-        Tracer          = 1,
-        TracerName      = "AirboatGunHeavyTracer",
-        Force           = self.Primary.NumShots,
-        Damage          = self.Primary.Damage
-    }
-   
-    bullet.Callback = function(attacker, trace, dmginfo)
-        dmginfo:SetDamageType(DMG_AIRBOAT)
-    end
-
-    self.Weapon:FireBullets(bullet)
     self:EmitSound(self.Primary.Sound)
 end
 
@@ -113,23 +98,14 @@ function SWEP:Reload()
 end
 
 
+function SWEP:CreateDisk(pos, ang)
+    local disk = ents.Create("ttt_dislocator_disk")
+    if IsValid(disk) then
+        disk:SetPos(pos)
+        disk:SetAngles(ang)
 
-function SWEP:CreateDisk(tgt, pos)
-   local disk = ents.Create("ttt_dislocator_disk")
-   if IsValid(disk) then
-      local ang = self:GetOwner():GetAimVector():Angle()
-      ang:RotateAroundAxis(ang:Right(), 90)
-
-      disk:SetPos(pos)
-      disk:SetAngles(ang)
-
-      disk:Spawn()
-
-      disk:SetOwner(self:GetOwner())
-
-      local stuck = disk:StickTo(tgt)
-
-      if not stuck then disk:Remove() end
-      self.disk = disk -- TODO: Only allow one disk to be active at a time
-   end
+        disk:SetOwner(self:GetOwner())
+        disk:Spawn()
+        disk:Activate()
+    end
 end
