@@ -8,6 +8,7 @@ ENT.TrailColour = Color(125, 54, 194)
 ENT.Stuck = false
 ENT.Weaponised = false
 ENT.InitialSpeed = 1000
+ENT.MaxFlightTime = 3
 
 ENT.PunchCurrentVelocity = Vector(0, 0, 0)
 ENT.PunchSpeed = 500
@@ -16,6 +17,7 @@ ENT.PunchRemaining = 5
 ENT.NextPunch = 0
 
 function ENT:Initialize()
+    self.BirthTime = CurTime()
     self:SetModel(self.Model)
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
@@ -91,6 +93,16 @@ if SERVER then
     local diesound = Sound("weapons/physcannon/energy_disintegrate4.wav")
     local punchsound = Sound("weapons/ar2/ar2_altfire.wav")
 
+    function ENT:Die()
+        local pos = self:GetPos()
+        sound.Play(diesound, pos, 100, 100)
+        self:Remove()
+        local effect = EffectData()
+        effect:SetStart(pos)
+        effect:SetOrigin(pos)
+        util.Effect("Explosion", effect, true, true)
+    end
+
     function ENT:PhysicsCollide( collisionData, phys )
         self:StickTo(collisionData.HitEntity)
     end
@@ -115,7 +127,12 @@ if SERVER then
 
     function ENT:Think()
         -- TODO: Disable when not stuck?
-        if not self.Stuck then return end
+        if not self.Stuck then
+            if (self.BirthTime + self.MaxFlightTime <= CurTime()) then
+                self:Die()
+            end
+            return
+        end
 
         if self.HasJustStuck then
             local phys = self:GetPhysicsObject()
@@ -140,13 +157,7 @@ if SERVER then
         end
 
         if self.PunchRemaining <= 0 then
-            local pos = self:GetPos()
-            sound.Play(diesound, pos, 100, 100)
-            self:Remove()
-            local effect = EffectData()
-            effect:SetStart(pos)
-            effect:SetOrigin(pos)
-            util.Effect("Explosion", effect, true, true)
+            self:Die()
         else
             self.PunchRemaining = self.PunchRemaining - 1
 
