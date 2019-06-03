@@ -118,8 +118,6 @@ if SERVER then
         if not self.Stuck then return end
 
         if self.HasJustStuck then
-            self:SetPos(self:GetPos() + self:GetAngles():Forward() * 20)
-
             local phys = self:GetPhysicsObject()
             if phys and phys:IsValid() then
                 phys:SetVelocity(Vector(0, 0, 0))
@@ -129,6 +127,8 @@ if SERVER then
             self:SetSolid(SOLID_NONE)
 
             self:SetParent(self.PunchEntity)
+
+            self:SetPos(Vector(0, 0, self:GetPos().z))
             self.HasJustStuck = false
         end
 
