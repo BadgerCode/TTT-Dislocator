@@ -97,24 +97,19 @@ if SERVER then
    local diesound = Sound("weapons/physcannon/energy_disintegrate4.wav")
    local punchsound = Sound("weapons/ar2/ar2_altfire.wav")
 
-   local function RandomVelocity(distance)
-      -- Source: https://stackoverflow.com/questions/5531827/random-point-on-a-given-sphere
-      local u = math.random()
-      local v = math.random()
-      local theta = 2 * math.pi * u
-      local phi = math.acos(2 * v - 1)
-      local x = (distance * math.sin(phi) * math.cos(theta))
-      local y = (distance * math.sin(phi) * math.sin(theta))
-      local z = (distance * math.cos(phi))
-      return Vector(x, y, z)
-   end
+   function ENT:RandomVelocity()
+      local distance = self.PunchSpeed
 
-   local function RandomVelocity2(distance)
       local u = math.random()
       local theta = 2 * math.pi * u
+      
       local x = (distance * math.cos(theta))
       local y = (distance * math.sin(theta))
       local z = math.random(80, 120)
+
+      local finalPunch = self.PunchRemaining == 0
+      if(finalPunch) then z = z + 200 end
+      
       return Vector(x, y, z)
    end
 
@@ -145,7 +140,7 @@ if SERVER then
             local ply = self.PunchEntity
             local norm = Vector(0.5, 0.5, 1)
 
-            self.PunchCurrentVelocity = RandomVelocity2(self.PunchSpeed)
+            self.PunchCurrentVelocity = self:RandomVelocity()
 
             ply:SetGroundEntity(NULL)
             ply:SetVelocity(self.PunchCurrentVelocity)
