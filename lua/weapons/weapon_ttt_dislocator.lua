@@ -94,7 +94,7 @@ function SWEP:PostDrawViewModel(viewModel)
     }
     render.Model(modelSettings, self.DiskViewModel)
     -- Make sure to reset the material AFTER rendering the clientside prop
-    Material(self.ViewModelDiskModelMaterial):SetVector("$color", Vector(1, 1, 1) )
+    Material(self.ViewModelDiskModelMaterial):SetVector("$color2", Vector(1, 1, 1) )
 end
 
 

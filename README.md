@@ -29,6 +29,8 @@ TODO
 * Change launch behaviour
     * Keep moving the player until time is up (10 seconds?)
     * If player hits a wall, move a different direction
+* Prevent sticking to person who fired it?
+* Ensure traitor gets credit for fall damage
 * Support other entities?
     * NPCS? Props?
 * Put into gamemodes/terrortown/entities/weapons?

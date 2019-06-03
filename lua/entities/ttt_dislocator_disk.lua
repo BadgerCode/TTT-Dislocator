@@ -11,7 +11,8 @@ ENT.InitialSpeed = 1000
 ENT.MaxFlightTime = 3
 
 ENT.PunchCurrentVelocity = Vector(0, 0, 0)
-ENT.PunchSpeed = 500
+ENT.PunchSpeed = 100
+ENT.FinalBonusUpVelocity = 200
 ENT.PunchMax = 5
 ENT.PunchRemaining = 5
 ENT.NextPunch = 0
@@ -53,6 +54,9 @@ end
 function ENT:OnRemove()
     if IsValid(self.BallSprite) then
         self.BallSprite:Remove()
+    end
+
+    if IsValid(self:GetParent()) then
         self:GetParent().HasDislocator = false
     end
 end
@@ -114,12 +118,12 @@ if SERVER then
 
         local x = distance * math.cos(theta)
         local y = distance * math.sin(theta)
-        local z = math.random(80, 120)
+        local z = math.random(80, 100)
 
         local finalPunch = self.PunchRemaining == 0
 
         if (finalPunch) then
-            z = z + 200
+            z = z + self.FinalBonusUpVelocity
         end
 
         return Vector(x, y, z)
@@ -143,9 +147,9 @@ if SERVER then
             self:SetMoveType(MOVETYPE_VPHYSICS)
             self:SetSolid(SOLID_NONE)
 
+            self:SetPos(Vector(self.PunchEntity:GetPos().x, self.PunchEntity:GetPos().y, self:GetPos().z))
             self:SetParent(self.PunchEntity)
 
-            self:SetPos(Vector(0, 0, self:GetPos().z))
             self.HasJustStuck = false
         end
 
