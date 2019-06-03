@@ -134,6 +134,7 @@ function SWEP:CreateDisk(pos, ang)
         disk:SetPos(pos)
         disk:SetAngles(ang)
 
+        disk.WeaponClass = self:GetClass()
         disk:SetOwner(self:GetOwner())
         disk:Spawn()
         disk:Activate()

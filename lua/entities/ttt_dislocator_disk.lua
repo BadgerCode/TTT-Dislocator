@@ -42,7 +42,7 @@ function ENT:Initialize()
 end
 
 function ENT:StickTo(ent)
-    if (not ent:IsPlayer() or ent.HasDislocator) then return false end
+    if (not ent:IsPlayer() or ent.HasDislocator or ent == self:GetOwner()) then return false end
     self.PunchEntity = ent
     self:StartEffects()
     self.Stuck = true
@@ -108,6 +108,7 @@ if SERVER then
     end
 
     function ENT:PhysicsCollide( collisionData, phys )
+        if self.Stuck then return end
         self:StickTo(collisionData.HitEntity)
     end
 
@@ -118,7 +119,7 @@ if SERVER then
 
         local x = distance * math.cos(theta)
         local y = distance * math.sin(theta)
-        local z = math.random(80, 100)
+        local z = math.random(80, 120)
 
         local finalPunch = self.PunchRemaining == 0
 
@@ -168,9 +169,14 @@ if SERVER then
             if IsValid(self.PunchEntity) and IsValid(self.PunchEntity:GetPhysicsObject()) then
                 local ply = self.PunchEntity
                 local norm = Vector(0.5, 0.5, 1)
+
                 self.PunchCurrentVelocity = self:GenerateRandomVelocity()
+
                 ply:SetGroundEntity(NULL)
                 ply:SetVelocity(self.PunchCurrentVelocity)
+                ply.was_pushed = {att=self:GetOwner(), t=CurTime(), wep=self.WeaponClass}
+                print(self.WeaponClass)
+
                 local effect = EffectData()
                 effect:SetStart(self:GetPos())
                 effect:SetOrigin(self:GetPos())
@@ -178,6 +184,7 @@ if SERVER then
                 effect:SetRadius(16)
                 effect:SetScale(1)
                 util.Effect("ManhackSparks", effect, true, true)
+
                 sound.Play(punchsound, self:GetPos(), 80, 100)
             end
         end
