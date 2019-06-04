@@ -33,6 +33,11 @@ TODO
 * Change launch behaviour
     * Keep moving the player until time is up (10 seconds?)
     * If player hits a wall, move a different direction
+    * Make movement a bit more consistent
+        * Currently, the target often gets stuck somewhere
+        * Or the velocity isn't that strong
+        * Sometimes the velocity can be extremely strong and fly the player around
+    * Make it harder for players to fight the movement
 * Stop the wobble of the projectile?
 * Only allow one disk per gun at a time?
 * Support other entities?

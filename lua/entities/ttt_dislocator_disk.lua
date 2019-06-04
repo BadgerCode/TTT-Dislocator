@@ -173,8 +173,7 @@ if SERVER then
 
                 ply:SetGroundEntity(NULL)
                 ply:SetVelocity(self.PunchCurrentVelocity)
-                ply.was_pushed = {att=self:GetOwner(), t=CurTime(), wep=self.WeaponClass}
-                print(self.WeaponClass)
+                ply.was_pushed = {att = self:GetOwner(), t = CurTime(), wep = self.WeaponClass}
 
                 local effect = EffectData()
                 effect:SetStart(self:GetPos())
