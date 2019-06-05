@@ -32,7 +32,7 @@ SWEP.Primary.Cone       = 0
 SWEP.Primary.Automatic  = true
 SWEP.Primary.Recoil     = 0
 SWEP.Primary.Knockback  = 100
-SWEP.Primary.Sound      = Sound( "weapons/airboat/airboat_gun_energy1.wav" )
+SWEP.Primary.Sound      = Sound( "weapons/physcannon/superphys_launch1.wav" )
 
 SWEP.Primary.ClipSize       = 5
 SWEP.Primary.ClipMax        = 5
@@ -52,6 +52,9 @@ SWEP.ViewModelDiskModelMaterial = "models/props_junk/phys_objects01a"
 
 SWEP.WorldModel = "models/weapons/w_physics.mdl"
 SWEP.WorldModelColour = Color(125, 54, 194, 255)
+
+SWEP.ReadySound         = Sound("weapons/physcannon/physcannon_dryfire.wav")
+SWEP.EquipSound         = Sound("weapons/physcannon/physcannon_claws_open.wav")
 
 SWEP.NoSights = true
 
@@ -95,6 +98,11 @@ function SWEP:PostDrawViewModel(viewModel)
     render.Model(modelSettings, self.DiskViewModel)
     -- Make sure to reset the material AFTER rendering the clientside prop
     Material(self.ViewModelDiskModelMaterial):SetVector("$color2", Vector(1, 1, 1) )
+
+    if (self.ReadySoundPlayed == false and timeUntilShowModel == 0) then
+        self.ReadySoundPlayed = true
+        surface.PlaySound(self.ReadySound)
+    end
 end
 
 
@@ -116,6 +124,8 @@ function SWEP:PrimaryAttack(worldsnd)
         local diskPos = vsrc + vang * 50 + diskAngles:Right() * 20 - diskAngles:Up() * 20
 
         self:CreateDisk(diskPos, diskAngles)
+    elseif CLIENT then
+        self.ReadySoundPlayed = false
     end
 
     owner:ViewPunch( Angle( math.Rand(-0.2,-0.1) * self.Primary.Recoil, math.Rand(-0.1,0.1) * self.Primary.Recoil, 0 ) )
@@ -138,5 +148,13 @@ function SWEP:CreateDisk(pos, ang)
         disk:SetOwner(self:GetOwner())
         disk:Spawn()
         disk:Activate()
+    end
+end
+
+if CLIENT then
+    function SWEP:Deploy()
+        self.ReadySoundPlayed = false
+        surface.PlaySound(self.EquipSound)
+        return true
     end
 end

@@ -17,6 +17,32 @@ ENT.PunchMax = 5
 ENT.PunchRemaining = 5
 ENT.NextPunch = 0
 
+
+ENT.AttachSound = Sound("weapons/physcannon/physcannon_drop.wav")
+ENT.InactiveSound = "dislocator_disk_inactive"
+ENT.ActiveSound = "dislocator_disk_active"
+ENT.DieSound = Sound("weapons/physcannon/energy_disintegrate5.wav")
+ENT.PunchSound = Sound("weapons/physcannon/energy_sing_flyby1.wav")
+ENT.PunchSoundAlt = Sound("weapons/physcannon/energy_sing_flyby2.wav")
+
+sound.Add( {
+    name = "dislocator_disk_inactive",
+    channel = CHAN_STATIC,
+    volume = 1.0,
+    level = 80,
+    sound = "weapons/physcannon/superphys_hold_loop.wav"
+})
+
+sound.Add( {
+    name = "dislocator_disk_active",
+    channel = CHAN_STATIC,
+    volume = 1.0,
+    level = 80,
+    sound = "weapons/physcannon/energy_sing_loop4.wav"
+})
+
+
+
 function ENT:Initialize()
     self.BirthTime = CurTime()
     self:SetModel(self.Model)
@@ -34,6 +60,7 @@ function ENT:Initialize()
 
     if SERVER then
         self:SetFriction(0)
+        self:EmitSound(self.InactiveSound)
     end
 
     self:SetColor(self.TrailColour)
@@ -94,12 +121,12 @@ function ENT:StartEffects()
 end
 
 if SERVER then
-    local diesound = Sound("weapons/physcannon/energy_disintegrate4.wav")
-    local punchsound = Sound("weapons/ar2/ar2_altfire.wav")
-
     function ENT:Die()
+        self:StopSound(self.InactiveSound)
+        self:StopSound(self.ActiveSound)
+
         local pos = self:GetPos()
-        sound.Play(diesound, pos, 100, 100)
+        sound.Play(self.DieSound, pos, 100, 100)
         self:Remove()
         local effect = EffectData()
         effect:SetStart(pos)
@@ -121,9 +148,9 @@ if SERVER then
         local y = distance * math.sin(theta)
         local z = math.random(80, 120)
 
-        local finalPunch = self.PunchRemaining == 0
+        local isFinalPunch = self.PunchRemaining == 0
 
-        if (finalPunch) then
+        if (isFinalPunch) then
             z = z + self.FinalBonusUpVelocity
         end
 
@@ -151,6 +178,10 @@ if SERVER then
             self:SetParent(self.PunchEntity)
 
             self.HasJustStuck = false
+            sound.Play(self.AttachSound, self.PunchEntity:GetPos(), 80, 100)
+
+            self:StopSound(self.InactiveSound)
+            self:EmitSound(self.ActiveSound)
         end
 
         if (self.NextPunch > CurTime()) then
@@ -183,7 +214,9 @@ if SERVER then
                 effect:SetScale(1)
                 util.Effect("ManhackSparks", effect, true, true)
 
-                sound.Play(punchsound, self:GetPos(), 80, 100)
+                local punchSound = self.PunchSound
+                if (math.random(0, 100) >= 50) then punchSound = self.PunchSoundAlt end
+                sound.Play(punchSound, self:GetPos(), 80, 100)
             end
         end
 
