@@ -30,6 +30,7 @@ TODO
     * ✅ Laser sound when shot
     * ✅ Laser sound when flying (with or without player)
     * ✅ Ambient hum when ready?
+* ✅ Hide disk for the player it is attached to
 * Change launch behaviour
     * Keep moving the player until time is up (10 seconds?)
     * If player hits a wall, move a different direction

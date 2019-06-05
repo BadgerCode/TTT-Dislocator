@@ -11,10 +11,10 @@ ENT.InitialSpeed = 1000
 ENT.MaxFlightTime = 3
 
 ENT.PunchCurrentVelocity = Vector(0, 0, 0)
-ENT.PunchSpeed = 100
-ENT.FinalBonusUpVelocity = 200
-ENT.PunchMax = 5
-ENT.PunchRemaining = 5
+ENT.PunchSpeed = 200
+ENT.FinalBonusUpVelocity = 210
+ENT.PunchMax = 6
+ENT.PunchRemaining = 0
 ENT.NextPunch = 0
 
 
@@ -68,6 +68,13 @@ function ENT:Initialize()
     self.PunchRemaining = self.PunchMax
 end
 
+function ENT:Draw()
+    local punchEntityId = self:GetNWInt("PunchEntityId", -1)
+    if punchEntityId == -1 or LocalPlayer():EntIndex() != punchEntityId then
+        self:DrawModel()
+    end
+end
+
 function ENT:StickTo(ent)
     if (not ent:IsPlayer() or ent.HasDislocator or ent == self:GetOwner()) then return false end
     self.PunchEntity = ent
@@ -75,6 +82,8 @@ function ENT:StickTo(ent)
     self.Stuck = true
     self.HasJustStuck = true
     ent.HasDislocator = true
+
+    self:SetNWInt("PunchEntityId", self.PunchEntity:EntIndex())
     return true
 end
 
