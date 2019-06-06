@@ -2,8 +2,10 @@ AddCSLuaFile()
 
 ENT.Type = "anim"
 ENT.Model = Model("models/props_junk/sawblade001a.mdl")
+ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
 
+ENT.DiskColour = Color(125, 54, 194, 125)
 ENT.TrailColour = Color(125, 54, 194)
 ENT.Stuck = false
 ENT.Weaponised = false
@@ -63,15 +65,16 @@ function ENT:Initialize()
         self:EmitSound(self.InactiveSound)
     end
 
-    self:SetColor(self.TrailColour)
+    self:SetRenderMode(RENDERMODE_TRANSCOLOR)
+    self:SetColor(self.DiskColour)
     self.Stuck = false
     self.PunchRemaining = self.PunchMax
 end
 
-function ENT:Draw()
+function ENT:DrawTranslucent()
     local punchEntityId = self:GetNWInt("PunchEntityId", -1)
     if punchEntityId == -1 or LocalPlayer():EntIndex() != punchEntityId then
-        self:DrawModel()
+        self:Draw()
     end
 end
 

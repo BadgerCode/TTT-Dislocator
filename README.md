@@ -31,6 +31,7 @@ TODO
     * ✅ Laser sound when flying (with or without player)
     * ✅ Ambient hum when ready?
 * ✅ Hide disk for the player it is attached to
+* ✅ Make disk translucent
 * Change launch behaviour
     * Keep moving the player until time is up (10 seconds?)
     * If player hits a wall, move a different direction
@@ -41,6 +42,7 @@ TODO
     * Make it harder for players to fight the movement
 * Stop the wobble of the projectile?
 * Only allow one disk per gun at a time?
+* Add glow to disk
 * Support other entities?
     * NPCS? Props?
 * Put into gamemodes/terrortown/entities/weapons?
