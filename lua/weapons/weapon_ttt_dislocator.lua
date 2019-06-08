@@ -75,27 +75,28 @@ function SWEP:PostDrawViewModel(viewModel)
 
     local timeUntilShowModel = math.max(self:GetNextPrimaryFire() - CurTime(), 0)
 
-    if self:Clip1() < 1 or timeUntilShowModel - 1 > 0 then return end
+    if self:Clip1() >= 1 and timeUntilShowModel - 1 <= 0 then
 
-    if not IsValid(self.DiskViewModel) then
-        self.DiskViewModel = ClientsideModel(self.ViewModelDiskModel, RENDERGROUP_VIEWMODEL)
-        self.DiskViewModel:SetModelScale(0.5)
+        if not IsValid(self.DiskViewModel) then
+            self.DiskViewModel = ClientsideModel(self.ViewModelDiskModel, RENDERGROUP_VIEWMODEL)
+            self.DiskViewModel:SetModelScale(0.5)
+        end
+
+        self.DiskViewModel:SetModelScale(0.5 * (1 - timeUntilShowModel))
+
+        local rightHandPos, rightHandAngle = viewModel:GetBonePosition(viewModel:LookupBone("ValveBiped.Bip01_L_Hand"))
+        rightHandPos = rightHandPos
+                        + rightHandAngle:Forward() * 70
+                        + rightHandAngle:Up() * -12
+                        + rightHandAngle:Right() * 12
+
+        local modelSettings = {
+            model = self.ViewModelDiskModel,
+            pos = rightHandPos,
+            angle = rightHandAngle
+        }
+        render.Model(modelSettings, self.DiskViewModel)
     end
-
-    self.DiskViewModel:SetModelScale(0.5 * (1 - timeUntilShowModel))
-
-    local rightHandPos, rightHandAngle = viewModel:GetBonePosition(viewModel:LookupBone("ValveBiped.Bip01_L_Hand"))
-    rightHandPos = rightHandPos
-                    + rightHandAngle:Forward() * 70
-                    + rightHandAngle:Up() * -12
-                    + rightHandAngle:Right() * 12
-
-    local modelSettings = {
-        model = self.ViewModelDiskModel,
-        pos = rightHandPos,
-        angle = rightHandAngle
-    }
-    render.Model(modelSettings, self.DiskViewModel)
     -- Make sure to reset the material AFTER rendering the clientside prop
     Material(self.ViewModelDiskModelMaterial):SetVector("$color2", Vector(1, 1, 1) )
 
