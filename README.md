@@ -8,30 +8,6 @@ From destroy all humans
 
 
 TODO
-* ✅ Basic weapon
-    * ✅ Use trace to hit a player
-        * Only players for now
-    * ✅ Attach entity to player
-    * ✅ Launch player in random direction
-        * ✅ Decrease launches remaining
-    * ✅ Wait delay
-    * ✅ If launches remaining is 0, launch player upwards and destroy self
-* ✅ Prevent targetting a player with one already on
-* ✅ Icon
-* ✅ Projectile
-    * ✅ Disk model
-    * ✅ Moves through air (not instant)
-    * ✅ Check collisions to decide which player to attach to
-* ✅ Disk on view model
-* ✅ Explode projectile if no target found within period of time
-* ✅ Prevent sticking to person who fired it?
-* ✅ Ensure traitor gets credit for fall damage
-* ✅ Change sound effects
-    * ✅ Laser sound when shot
-    * ✅ Laser sound when flying (with or without player)
-    * ✅ Ambient hum when ready?
-* ✅ Hide disk for the player it is attached to
-* ✅ Make disk translucent
 * Change launch behaviour
     * Keep moving the player until time is up (10 seconds?)
     * If player hits a wall, move a different direction
