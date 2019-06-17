@@ -1,7 +1,9 @@
 AddCSLuaFile("shared.lua")
 
 SWEP.Author = "badger@badgercode.co.uk"
-SWEP.Instructions = "TTT weapon to launch players in random directions"
+SWEP.Instructions = [[
+Shoots a disk which launches players in 
+random directions.]]
 
 SWEP.HoldType = "physgun" -- TODO: check this. Doesn't work in thirdperson
 
@@ -15,9 +17,13 @@ if CLIENT then
 
     SWEP.EquipMenuData = {
         type = "item_weapon",
-        desc = "Shoot at a player to launch them in random directions"
+        desc = [[
+Shoots a disk which launches players in 
+random directions.]]
     };
 end
+
+
 
 
 SWEP.Base = "weapon_tttbase"
