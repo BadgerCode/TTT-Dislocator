@@ -16,8 +16,11 @@ ENT.PunchCurrentVelocity = Vector(0, 0, 0)
 ENT.PunchSpeed = 250
 ENT.FinalBonusUpVelocity = 250
 ENT.PunchMax = 6
+ENT.ViewDistortDelay = 0.25
+
 ENT.PunchRemaining = 0
 ENT.NextPunch = 0
+ENT.NextViewDistort = 0
 
 
 ENT.AttachSound = Sound("weapons/physcannon/physcannon_drop.wav")
@@ -81,6 +84,7 @@ end
 
 function ENT:StickTo(ent)
     if (not ent:IsPlayer() or ent.HasDislocator or ent == self:GetOwner()) then return false end
+
     self.PunchEntity = ent
     self:StartEffects()
     self.Stuck = true
@@ -159,7 +163,7 @@ if SERVER then
 
         local x = distance * math.cos(theta)
         local y = distance * math.sin(theta)
-        local z = math.random(80, 120)
+        local z = math.random(100, 120)
 
         local isFinalPunch = self.PunchRemaining == 0
 
@@ -168,6 +172,20 @@ if SERVER then
         end
 
         return Vector(x, y, z)
+    end
+
+    function ENT:DistortPlayerView()
+        local effectData = EffectData()
+        effectData:SetEntity(self.PunchEntity)
+        effectData:SetMagnitude(3)
+        effectData:SetScale(2)
+        util.Effect("TeslaHitBoxes", effectData)
+
+        local eyeang = self.PunchEntity:EyeAngles()
+        local j = 30
+        eyeang.pitch = math.Clamp(eyeang.pitch + math.Rand(-j, j), -90, 90)
+        eyeang.yaw = math.Clamp(eyeang.yaw + math.Rand(-j, j), -90, 90)
+        self.PunchEntity:SetEyeAngles(eyeang)
     end
 
     function ENT:Think()
@@ -197,10 +215,15 @@ if SERVER then
             self:EmitSound(self.ActiveSound)
         end
 
+        if self.NextViewDistort < CurTime() then
+            self:DistortPlayerView(ply)
+            self.NextViewDistort = CurTime() + self.ViewDistortDelay
+        end
+
         if (self.NextPunch > CurTime()) then
             local ply = self.PunchEntity
+            ply:SetGroundEntity(NULL)
             ply:SetVelocity(self.PunchCurrentVelocity)
-
             return
         end
 
@@ -213,7 +236,9 @@ if SERVER then
                 local ply = self.PunchEntity
                 local norm = Vector(0.5, 0.5, 1)
 
+                local heightMultiplier = (1 - (self.PunchRemaining / self.PunchMax)) * 1.4
                 self.PunchCurrentVelocity = self:GenerateRandomVelocity()
+                self.PunchCurrentVelocity.z = self.PunchCurrentVelocity.z * heightMultiplier
 
                 ply:SetGroundEntity(NULL)
                 ply:SetVelocity(self.PunchCurrentVelocity)
