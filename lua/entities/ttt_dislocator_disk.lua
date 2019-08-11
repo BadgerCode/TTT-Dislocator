@@ -9,12 +9,12 @@ ENT.DiskColour = Color(125, 54, 194, 125)
 ENT.TrailColour = Color(125, 54, 194)
 ENT.Stuck = false
 ENT.Weaponised = false
-ENT.InitialSpeed = 1000
+ENT.InitialSpeed = 1500
 ENT.MaxFlightTime = 3
 
 ENT.PunchCurrentVelocity = Vector(0, 0, 0)
-ENT.PunchSpeed = 200
-ENT.FinalBonusUpVelocity = 210
+ENT.PunchSpeed = 250
+ENT.FinalBonusUpVelocity = 250
 ENT.PunchMax = 6
 ENT.PunchRemaining = 0
 ENT.NextPunch = 0
@@ -52,6 +52,7 @@ function ENT:Initialize()
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
     self:SetGravity(0)
+    self:SetCustomCollisionCheck(true)
 
     local phys = self:GetPhysicsObject()
     if phys and phys:IsValid() then
