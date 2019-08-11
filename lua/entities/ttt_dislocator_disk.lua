@@ -144,7 +144,7 @@ if SERVER then
         local effect = EffectData()
         effect:SetStart(pos)
         effect:SetOrigin(pos)
-        util.Effect("Explosion", effect, true, true)
+        util.Effect("AR2Explosion", effect, true, true)
     end
 
     function ENT:PhysicsCollide( collisionData, phys )
