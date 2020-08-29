@@ -1,7 +1,16 @@
 {
-    "title": "TTT Dislocator Weapon",
+    "title": "Sandbox Dislocator Weapon",
     "description": "Description",
     "type": "weapon",
-    "tags": ["fun"],
-    "ignore": [".git/*", "README.md", "full-icon.png", "icon.png", "workshop-thumb.jpg", "screenshots/*"]
+    "tags": [
+        "fun"
+    ],
+    "ignore": [
+        ".git/*",
+        "README.md",
+        "full-icon.png",
+        "icon.png",
+        "workshop-thumb.jpg",
+        "screenshots/*"
+    ]
 }
