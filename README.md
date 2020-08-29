@@ -6,7 +6,7 @@ Shoots a disk at players. The disk moves a player in random directions before la
 
 Download it on the Steam Workshop:
 
-[![subscribe](https://i.imgur.com/ZVRxFLT.png)](https://steamcommunity.com/sharedfiles/filedetails/?id=1773299680)
+[![subscribe](https://i.imgur.com/ZVRxFLT.png)](https://steamcommunity.com/sharedfiles/filedetails/?id=2213290789)
 
 <br>
 
