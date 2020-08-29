@@ -34,26 +34,25 @@ SWEP.Primary.Sound      = Sound( "weapons/physcannon/superphys_launch1.wav" )
 SWEP.Primary.ClipSize       = 5
 SWEP.Primary.ClipMax        = 5
 SWEP.Primary.DefaultClip    = 5
-SWEP.Primary.Ammo           = 'XBowBolt'
+SWEP.Primary.Ammo           = "XBowBolt"
 
-SWEP.Secondary.ClipSize     = 0
-SWEP.Secondary.ClipMax      = 0
-SWEP.Secondary.DefaultClip  = 0
-SWEP.Secondary.Ammo         = -1
+SWEP.Secondary.ClipSize     = -1
+SWEP.Secondary.ClipMax      = -1
+SWEP.Secondary.DefaultClip  = -1
+SWEP.Secondary.Ammo         = "none"
 
 
-SWEP.UseHands           = true
-
-SWEP.ViewModelFlip      = false
-SWEP.ViewModelFOV       = 54
-SWEP.ViewModel  = "models/weapons/c_superphyscannon.mdl"
-SWEP.ViewModelMaterial = "models/weapons/v_physcannon/v_superphyscannon_sheet"
-SWEP.ViewModelColour = Vector(0.49, 0.212, 0.761)
-SWEP.ViewModelDiskModel = "models/props_junk/sawblade001a.mdl"
+SWEP.UseHands                   = true
+SWEP.ViewModelFlip              = false
+SWEP.ViewModelFOV               = 54
+SWEP.ViewModel                  = "models/weapons/c_superphyscannon.mdl"
+SWEP.ViewModelMaterial          = "models/weapons/v_physcannon/v_superphyscannon_sheet"
+SWEP.ViewModelColour            = Vector(0.49, 0.212, 0.761)
+SWEP.ViewModelDiskModel         = "models/props_junk/sawblade001a.mdl"
 SWEP.ViewModelDiskModelMaterial = "models/props_junk/phys_objects01a"
 
-SWEP.WorldModel = "models/weapons/w_physics.mdl"
-SWEP.WorldModelColour = Color(125, 54, 194, 255)
+SWEP.WorldModel         = "models/weapons/w_physics.mdl"
+SWEP.WorldModelColour   = Color(125, 54, 194, 255)
 
 SWEP.ReadySound         = Sound("weapons/physcannon/physcannon_dryfire.wav")
 SWEP.EquipSound         = Sound("weapons/physcannon/physcannon_claws_open.wav")
@@ -140,7 +139,7 @@ end
 
 
 function SWEP:Reload()
-    -- Need to overload to prevent errors when NPCs use this weapon
+    self:DefaultReload(ACT_VM_RELOAD)
 end
 
 
