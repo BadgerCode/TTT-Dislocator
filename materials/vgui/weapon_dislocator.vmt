@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/weapon_dislocator"
+	"$translucent" 		1
+}

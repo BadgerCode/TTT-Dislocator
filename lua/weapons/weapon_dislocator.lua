@@ -1,36 +1,27 @@
 AddCSLuaFile("shared.lua")
 
-SWEP.Author = "badger@badgercode.co.uk"
-SWEP.Instructions = [[
-Shoots a disk which launches players in 
-random directions.]]
-
-SWEP.HoldType = "physgun"
+SWEP.Base           = "weapon_base"
+SWEP.PrintName      = "Dislocator"
+SWEP.Category       = "Destroy all humans"
+SWEP.Author         = "Badger (badger@badgercode.co.uk)"
+SWEP.Instructions   = "Shoots a disk which launches players in random directions."
 
 if CLIENT then
-    SWEP.PrintName = "Dislocator"
-    SWEP.Slot      = 7
-
-    SWEP.Icon = "vgui/ttt/icon_badger_dislocator"
-
-    SWEP.ViewModelFOV = 72
-
-    SWEP.EquipMenuData = {
-        type = "item_weapon",
-        desc = [[
-Shoots a disk which launches players in 
-random directions.]]
-    };
+    SWEP.WepSelectIcon      = surface.GetTextureID("vgui/weapon_dislocator")
+    SWEP.BounceWeaponIcon   = true
 end
 
+SWEP.HoldType       = "physgun"
+SWEP.Slot           = 3
+SWEP.SlotPos        = 10
+SWEP.Weight         = 5
+SWEP.AutoSwitchTo   = true
+SWEP.AutoSwitchFrom = false
+SWEP.DrawAmmo       = true
 
+SWEP.Spawnable      = true
+SWEP.AdminSpawnable = true
 
-
-SWEP.Base = "weapon_tttbase"
-
-SWEP.Kind = WEAPON_EQUIP1
-SWEP.CanBuy = {ROLE_TRAITOR}
-SWEP.LimitedStock = true
 
 SWEP.Primary.Damage     = 0
 SWEP.Primary.Delay      = 2
@@ -43,9 +34,14 @@ SWEP.Primary.Sound      = Sound( "weapons/physcannon/superphys_launch1.wav" )
 SWEP.Primary.ClipSize       = 5
 SWEP.Primary.ClipMax        = 5
 SWEP.Primary.DefaultClip    = 5
-SWEP.Primary.Ammo           = nil
+SWEP.Primary.Ammo           = 'XBowBolt'
 
-SWEP.AutoSpawnable      = false
+SWEP.Secondary.ClipSize     = 0
+SWEP.Secondary.ClipMax      = 0
+SWEP.Secondary.DefaultClip  = 0
+SWEP.Secondary.Ammo         = -1
+
+
 SWEP.UseHands           = true
 
 SWEP.ViewModelFlip      = false
@@ -61,8 +57,6 @@ SWEP.WorldModelColour = Color(125, 54, 194, 255)
 
 SWEP.ReadySound         = Sound("weapons/physcannon/physcannon_dryfire.wav")
 SWEP.EquipSound         = Sound("weapons/physcannon/physcannon_claws_open.wav")
-
-SWEP.NoSights = true
 
 
 
@@ -114,7 +108,7 @@ end
 
 
 
-function SWEP:PrimaryAttack(worldsnd)
+function SWEP:PrimaryAttack()
     if not self:CanPrimaryAttack() then return end
 
     self:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
@@ -139,6 +133,11 @@ function SWEP:PrimaryAttack(worldsnd)
 
     self:EmitSound(self.Primary.Sound)
 end
+
+function SWEP:SecondaryAttack()
+
+end
+
 
 function SWEP:Reload()
     -- Need to overload to prevent errors when NPCs use this weapon
