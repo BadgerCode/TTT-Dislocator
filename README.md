@@ -13,3 +13,9 @@ Download it on the Steam Workshop:
 From destroy all humans
 * https://destroyallhumans.fandom.com/wiki/Dislocator
 * https://youtu.be/5LzdSsuGWRg?t=98
+
+<br>
+
+# Sandbox
+
+For the sandbox version check the [master-sandbox](https://github.com/BadgerCode/TTT-Dislocator/tree/master-sandbox) branch.
