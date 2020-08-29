@@ -189,7 +189,6 @@ if SERVER then
     end
 
     function ENT:Think()
-        -- TODO: Disable when not stuck?
         if not self.Stuck then
             if (self.BirthTime + self.MaxFlightTime <= CurTime()) then
                 self:Die()

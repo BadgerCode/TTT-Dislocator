@@ -5,7 +5,7 @@ SWEP.Instructions = [[
 Shoots a disk which launches players in 
 random directions.]]
 
-SWEP.HoldType = "physgun" -- TODO: check this. Doesn't work in thirdperson
+SWEP.HoldType = "physgun"
 
 if CLIENT then
     SWEP.PrintName = "Dislocator"
