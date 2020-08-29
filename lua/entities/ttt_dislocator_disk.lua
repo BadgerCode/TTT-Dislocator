@@ -61,6 +61,7 @@ function ENT:Initialize()
     if phys and phys:IsValid() then
         phys:EnableGravity(false)
         phys:SetVelocity(self:GetAngles():Forward() * self.InitialSpeed)
+        phys:SetMass(1)
         phys:Wake()
     end
 
@@ -83,7 +84,7 @@ function ENT:DrawTranslucent()
 end
 
 function ENT:StickTo(ent)
-    if (not ent:IsPlayer() or ent.HasDislocator or ent == self:GetOwner()) then return false end
+    if ((ent:IsPlayer() or ent:IsNPC()) == false or ent.HasDislocator or ent == self:GetOwner()) then return false end
 
     self.PunchEntity = ent
     self:StartEffects()
@@ -151,7 +152,7 @@ if SERVER then
         util.Effect("AR2Explosion", effect, true, true)
     end
 
-    function ENT:PhysicsCollide( collisionData, phys )
+    function ENT:PhysicsCollide(collisionData, phys)
         if self.Stuck then return end
         self:StickTo(collisionData.HitEntity)
     end
@@ -181,11 +182,14 @@ if SERVER then
         effectData:SetScale(2)
         util.Effect("TeslaHitBoxes", effectData)
 
-        local eyeang = self.PunchEntity:EyeAngles()
-        local j = 30
-        eyeang.pitch = math.Clamp(eyeang.pitch + math.Rand(-j, j), -90, 90)
-        eyeang.yaw = math.Clamp(eyeang.yaw + math.Rand(-j, j), -90, 90)
-        self.PunchEntity:SetEyeAngles(eyeang)
+        if (self.PunchEntity:IsPlayer()) then
+            local eyeang = self.PunchEntity:EyeAngles()
+            local j = 30
+            eyeang.pitch = math.Clamp(eyeang.pitch + math.Rand(-j, j), -90, 90)
+            eyeang.yaw = math.Clamp(eyeang.yaw + math.Rand(-j, j), -90, 90)
+
+            self.PunchEntity:SetEyeAngles(eyeang)
+        end
     end
 
     function ENT:Think()
@@ -193,6 +197,11 @@ if SERVER then
             if (self.BirthTime + self.MaxFlightTime <= CurTime()) then
                 self:Die()
             end
+            return
+        end
+
+        if (self.PunchEntity:Health() <= 0) then
+            self:Die()
             return
         end
 
